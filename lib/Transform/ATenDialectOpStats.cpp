@@ -12,6 +12,7 @@
 #include "torch-mlir/Dialect/Torch/IR/TorchOps.h"
 
 #include "xten/Util/Util.h"
+#include "xten/Dialect/XTen/XTenOps.h"
 
 #include "llvm/Support/Debug.h"
 #include "mlir/IR/BuiltinOps.h"
@@ -49,6 +50,7 @@ std::map<std::string, uint64_t> getConv2dStatisticsWithType(T o, Torch::BaseTens
     auto co = o.groups().getDefiningOp();
     auto ia = co->template getAttrOfType<IntegerAttr>("value");
     uint64_t groups = ia.getValue().getZExtValue();
+    
     // Number of forward MACs per pixel =
     //  kernel_width * kernel_height * ifm_depth / groups
     uint64_t MACs_per_OFM = (ifm_depth/groups) * kernel_height * kernel_width;
@@ -373,6 +375,11 @@ uint64_t getOperandTransferVolume(Torch::AtenConv2dOp op, unsigned int idx, bool
 
 uint64_t getResultTransferVolume(Torch::AtenConv2dOp op, unsigned int idx, bool write) {
   return getConv2dResultTransferVolume<Torch::AtenConv2dOp>(op, idx, write);
+}
+
+template<>
+std::map<std::string, uint64_t> getStatistics(xilinx::xten::Conv2dReLUOp op) {
+  return getConv2dStatistics<xilinx::xten::Conv2dReLUOp>(op);
 }
 
 // _convolution_backward
@@ -990,6 +997,7 @@ std::map<std::string, uint64_t> getATenOpStats(Operation *op)
 //  GET_STATS(AddmmOp)
 //  GET_STATS(AsStridedOp)
   GET_STATS(Torch::AtenBatchNormOp)
+  GET_STATS(xilinx::xten::Conv2dReLUOp)
   GET_STATS(Torch::AtenConv2dOp)
 //  GET_STATS(ConvolutionBackwardOp)
   GET_STATS(Torch::AtenDivTensorOp)

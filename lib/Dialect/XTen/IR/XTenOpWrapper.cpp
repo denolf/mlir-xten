@@ -244,7 +244,8 @@ namespace xilinx {
         }
 
         bool PartialConv2dOpWrapper::isDepthWise() {
-            unsigned int groups = this->conv.groups().getDefiningOp<mlir::arith::ConstantIntOp>().value();
+            llvm::APInt intT = this->conv.groups().getDefiningOp<mlir::torch::Torch::ConstantIntOp>().value();
+            unsigned int groups = intT.getSExtValue();
             mlir::torch::Torch::BaseTensorType aShape = this->conv.input().getType().dyn_cast<mlir::torch::Torch::BaseTensorType>();
             ArrayRef<int64_t> aShapeAR = aShape.getSizes();
 
@@ -393,7 +394,8 @@ namespace xilinx {
         }
 
         bool Conv2dReLUOpWrapper::isDepthWise() {
-            unsigned int groups = this->conv.groups().getDefiningOp<mlir::arith::ConstantIntOp>().value();
+            llvm::APInt intT = this->conv.groups().getDefiningOp<mlir::torch::Torch::ConstantIntOp>().value();
+            unsigned int groups = intT.getSExtValue();
             mlir::torch::Torch::BaseTensorType aShape = this->conv.input().getType().dyn_cast<mlir::torch::Torch::BaseTensorType>();
             ArrayRef<int64_t> aShapeAR = aShape.getSizes();
 
@@ -548,7 +550,8 @@ namespace xilinx {
         }
 
         bool PartialConv2dReLUOpWrapper::isDepthWise() {
-            unsigned int groups = this->conv.groups().getDefiningOp<mlir::arith::ConstantIntOp>().value();
+            llvm::APInt intT = this->conv.groups().getDefiningOp<mlir::torch::Torch::ConstantIntOp>().value();
+            unsigned int groups = intT.getSExtValue();
             mlir::torch::Torch::BaseTensorType aShape = this->conv.input().getType().dyn_cast<mlir::torch::Torch::BaseTensorType>();
             ArrayRef<int64_t> aShapeAR = aShape.getSizes();
 
@@ -698,7 +701,8 @@ namespace xilinx {
         }
 
         bool PartialConv2dBatchNormReLUOpWrapper::isDepthWise() {
-            unsigned int groups = this->conv.groups().getDefiningOp<mlir::arith::ConstantIntOp>().value();
+            llvm::APInt intT = this->conv.groups().getDefiningOp<mlir::torch::Torch::ConstantIntOp>().value();
+            unsigned int groups = intT.getSExtValue();
             mlir::torch::Torch::BaseTensorType aShape = this->conv.input().getType().dyn_cast<mlir::torch::Torch::BaseTensorType>();
             ArrayRef<int64_t> aShapeAR = aShape.getSizes();
 
@@ -871,7 +875,8 @@ namespace xilinx {
         }
 
         bool Conv2dBatchNormReLUOpWrapper::isDepthWise() {
-            unsigned int groups = this->conv.groups().getDefiningOp<mlir::arith::ConstantIntOp>().value();
+            llvm::APInt intT = this->conv.groups().getDefiningOp<mlir::torch::Torch::ConstantIntOp>().value();
+            unsigned int groups = intT.getSExtValue();
             mlir::torch::Torch::BaseTensorType aShape = this->conv.input().getType().dyn_cast<mlir::torch::Torch::BaseTensorType>();
             ArrayRef<int64_t> aShapeAR = aShape.getSizes();
 
